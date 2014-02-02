@@ -68,8 +68,8 @@
 		<key>PythonExecutable</key>
 		<string>/usr/bin/python</string>
 		<key>PythonLongVersion</key>
-		<string>2.7.5 (default, Aug 25 2013, 00:04:04) 
-[GCC 4.2.1 Compatible Apple LLVM 5.0 (clang-500.0.68)]</string>
+		<string>2.7.2 (default, Oct 11 2012, 20:14:37) 
+[GCC 4.2.1 Compatible Apple Clang 4.0 (tags/Apple/clang-418.0.60)]</string>
 		<key>PythonShortVersion</key>
 		<string>2.7</string>
 		<key>py2app</key>
@@ -79,7 +79,7 @@
 			<key>template</key>
 			<string>app</string>
 			<key>version</key>
-			<string>0.7.1</string>
+			<string>0.7.3</string>
 		</dict>
 	</dict>
 </dict>
