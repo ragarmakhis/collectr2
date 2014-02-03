@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
     </dependencies>
@@ -7,6 +7,9 @@
         <customObject id="-2" userLabel="File's Owner" customClass="collectrController">
             <connections>
                 <outlet property="outputTextField" destination="D4C-g3-8JO" id="tJc-IG-XVl"/>
+                <outlet property="txtOnlyTextField" destination="rHB-gk-yEi" id="4Zc-VZ-3hY"/>
+                <outlet property="typeSourceTextField" destination="i40-ob-YqN" id="mlY-2I-I4E"/>
+                <outlet property="typeXMLTextField" destination="3aW-ZC-vUY" id="cYc-rQ-AnN"/>
                 <outlet property="volumesTextField" destination="qUJ-J6-lPE" id="0ic-sX-VSS"/>
                 <outlet property="xmlTextField" destination="smR-0W-d4C" id="igS-5R-TJF"/>
             </connections>
@@ -17,7 +20,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="559" height="344"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1028"/>
             <view key="contentView" id="2">
                 <rect key="frame" x="0.0" y="0.0" width="559" height="344"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -99,11 +102,11 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" title="FCP XML" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="MM5-w1-oIQ" id="cjk-Vs-WXs">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="menu"/>
                             <menu key="menu" title="OtherViews" id="8Pj-Bv-ayb">
                                 <items>
-                                    <menuItem title="FCP XML" state="on" id="MM5-w1-oIQ"/>
-                                    <menuItem title="Davinci Resolve" id="ba6-z4-55d"/>
+                                    <menuItem title="FCP XML" state="on" toolTip="F" id="MM5-w1-oIQ"/>
+                                    <menuItem title="Davinci Resolve" toolTip="D" id="ba6-z4-55d"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
@@ -116,11 +119,11 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" title="R3D" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="nYU-QZ-xGB" id="IIw-Rp-U1Y">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="menu"/>
                             <menu key="menu" title="OtherViews" id="ZfE-rf-O0n">
                                 <items>
-                                    <menuItem title="Arri Alexa" id="aEL-wS-ZIi"/>
-                                    <menuItem title="R3D" state="on" id="nYU-QZ-xGB"/>
+                                    <menuItem title="Arri Alexa" toolTip="A" id="aEL-wS-ZIi"/>
+                                    <menuItem title="R3D" state="on" toolTip="R" id="nYU-QZ-xGB"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
@@ -154,6 +157,33 @@
                         <rect key="frame" x="131" y="159" width="411" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Folder" id="viy-w0-Y53">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3aW-ZC-vUY">
+                        <rect key="frame" x="121" y="233" width="424" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Type XML" id="Mas-MA-lar">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i40-ob-YqN">
+                        <rect key="frame" x="121" y="202" width="424" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Type Source" id="CDv-M2-Xl0">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rHB-gk-yEi">
+                        <rect key="frame" x="18" y="83" width="424" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="YES/NO" id="q22-bB-NPN">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

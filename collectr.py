@@ -5,12 +5,15 @@ class collectrController(NSWindowController):
     volumesTextField = objc.IBOutlet()
     xmlTextField = objc.IBOutlet()
     outputTextField = objc.IBOutlet()
+    typeXMLTextField = objc.IBOutlet()
+    typeSourceTextField = objc.IBOutlet()
+    txtOnlyTextField = objc.IBOutlet()
  
     def windowDidLoad(self):
         NSWindowController.windowDidLoad(self)
  
         # Start the counter
-        # self.count = 0
+        self.typeXML = 'F'
 
     @objc.IBAction
     def setVolumesDialog_(self, sender):
@@ -56,7 +59,7 @@ class collectrController(NSWindowController):
         openDlg.setCanChooseFiles_(True)
         openDlg.setCanChooseDirectories_(False)
         openDlg.setAllowsMultipleSelection_(False)
-        openDlg.setAllowedFileTypes_(['xml'])
+        openDlg.setAllowedFileTypes_(NSArray.arrayWithObject_('xml'))
         openDlg.setResolvesAliases_(True)
     
         # Вывести диалог модально
@@ -64,25 +67,25 @@ class collectrController(NSWindowController):
         if openDlg.runModal() == NSFileHandlingPanelOKButton:
         
             # Список выбранных файлов
-            self.volumes = openDlg.URLs()
-            self.volumesString = ''
-            for item in self.volumes:
-                item = item.absoluteString()#.replace('file://localhost/Volumes/','')
-                self.volumesString = self.volumesString + item.replace('file://localhost','') + '; '
-                 
-            self.volumesTextField.setStringValue_(self.volumesString[:-2])
+            self.xmlFile = openDlg.URLs().objectAtIndex_(0)
 
+            self.xmlTextField.setStringValue_(self.xmlFile)
+        
     @objc.IBAction
     def setTypeXML_(self, sender):
         # [F]inal Cut Pro or [D]avinci Resolve
 
-        pass
+        self.typeXML = self.sender.selectedItem().toolTip()
+
+        self.typeXMLTextField.setStringValue_(self.typeXML)
 
     @objc.IBAction
     def setTypeSource_(self, sender):
         # [A]rri Alexa or [R]3D source files
 
-        pass
+        self.typeSource = sender.selectedItem().toolTip()
+
+        self.typeSourceTextField.setStringValue_(self.typeSource)
 
     # @objc.IBAction
     # def setOutputTXT_(self, sender):
@@ -94,19 +97,42 @@ class collectrController(NSWindowController):
     def setPath_(self, sender):
         # Path where to copy R3D files
         
-        pass
+        # Создать диалог
+        openDlg = NSOpenPanel.openPanel()
+    
+        #Свойства диалога
+        openDlg.setCanChooseFiles_(False)
+        openDlg.setCanChooseDirectories_(True)
+        openDlg.setAllowsMultipleSelection_(False)
+        openDlg.setResolvesAliases_(True)
+    
+        # Вывести диалог модально
+        # Если запуск вернул нажатие кнопки OK - обработать выбранные файлы
+        if openDlg.runModal() == NSFileHandlingPanelOKButton:
+        
+            # Список выбранных файлов
+            self.outputPath = openDlg.URLs().objectAtIndex_(0)
+
+            self.outputTextField.setStringValue_(self.outputPath)
 
     @objc.IBAction
     def createTXTOnly_(self, sender):
         # [Y] - Makes only txt file with source filenames without find and copy
         
-        pass
+        self.createTXTOnly = sender.state()
+
+        if self.createTXTOnly:
+            self.txtOnlyTextField.setStringValue_("YES")
+        else:
+            self.txtOnlyTextField.setStringValue_("NO")
 
     @objc.IBAction
     def start_(self, sender):
         # start
         
-        pass
+        self.setTypeXML_(self)
+        setTypeSource_(self)
+        createTXTOnly_(self)
  
     # def updateDisplay(self):
     #     self.counterTextField.setStringValue_(self.count)
