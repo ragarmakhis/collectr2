@@ -12,8 +12,12 @@ class collectrController(NSWindowController):
     def windowDidLoad(self):
         NSWindowController.windowDidLoad(self)
  
-        # Start the counter
+        # init value
         self.typeXML = 'F'
+        self.typeSource = 'A'
+        self.createTXTOnly = 0
+        self.outputTxt = '/tmp/collectr.txt'
+        self.volumes = NSArray.arrayWithObject_(NSURL.URLWithString_("file://localhost/Volumes/"))
 
     @objc.IBAction
     def setVolumesDialog_(self, sender):
@@ -37,8 +41,9 @@ class collectrController(NSWindowController):
             self.volumes = openDlg.URLs()
             self.volumesString = ''
             for item in self.volumes:
-                item = item.absoluteString()#.replace('file://localhost/Volumes/','')
-                self.volumesString = self.volumesString + item.replace('file://localhost','') + '; '
+                fileName = item.lastPathComponent()
+                item = item.path()#.replace(fileName, '')
+                self.volumesString = self.volumesString + item + '; '
                  
             self.volumesTextField.setStringValue_(self.volumesString[:-2])
                
@@ -67,7 +72,8 @@ class collectrController(NSWindowController):
         if openDlg.runModal() == NSFileHandlingPanelOKButton:
         
             # Список выбранных файлов
-            self.xmlFile = openDlg.URLs().objectAtIndex_(0)
+            # self.xmlFile = openDlg.URLs().objectAtIndex_(0).absoluteString()
+            self.xmlFile = openDlg.URLs().objectAtIndex_(0).lastPathComponent()
 
             self.xmlTextField.setStringValue_(self.xmlFile)
         
@@ -116,6 +122,32 @@ class collectrController(NSWindowController):
             self.outputTextField.setStringValue_(self.outputPath)
 
     @objc.IBAction
+    def setOutputTxt_(self, sender):
+        # Path where to copy R3D files
+        
+        # Создать диалог
+        saveDlg = NSSavePanel.savePanel()
+    
+        #Свойства диалога
+        saveDlg.setCanChooseFiles_(True)
+        saveDlg.setCanChooseDirectories_(False)
+        saveDlg.setAllowsMultipleSelection_(False)
+        saveDlg.setAllowedFileTypes_(NSArray.arrayWithObject_('txt'))
+        saveDlg.setResolvesAliases_(True)
+    
+        # Вывести диалог модально
+        # Если запуск вернул нажатие кнопки OK - обработать выбранные файлы
+        if saveDlg.runModal() == NSFileHandlingPanelOKButton:
+        
+            # Список выбранных файлов
+            self.outputTxt = saveDlg.filename()#.objectAtIndex_(0)
+
+            alert = NSAlert.alloc().init()
+            alert.setMessageText_(self.outputTxt)#.componentsJoinedByString_(",\n"))
+            alert.runModal()
+            # self.outputTextField.setStringValue_(self.outputTxt)
+
+    @objc.IBAction
     def createTXTOnly_(self, sender):
         # [Y] - Makes only txt file with source filenames without find and copy
         
@@ -130,9 +162,30 @@ class collectrController(NSWindowController):
     def start_(self, sender):
         # start
         
-        self.setTypeXML_(self)
-        setTypeSource_(self)
-        createTXTOnly_(self)
+        #Set input XML filename from args
+        xmlName = self.xmlFile
+
+        # Set text filename from args or by default
+        txtName = self.outputTxt
+        # if args.output:
+        #     txtName = args.output
+        # else: 
+        #     txtName = args.input + '.txt'
+
+        # Set Volume from args or by default
+        volName = self.volumes
+        # if args.volume:
+        #     volName = '/Volumes/' + args.volume
+        # else:
+        #     volName = '/Volumes'
+        # print '\n' + 'R3D files will search in ' + volName + '...'
+
+        # Set path to copy R3D files
+        if args.path:
+            pathName = args.path + '/'
+        else:
+            pathName = '$PWD'
+        print 'R3D files will be copied to ' + pathName
  
     # def updateDisplay(self):
     #     self.counterTextField.setStringValue_(self.count)
