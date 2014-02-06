@@ -18,7 +18,7 @@ class collectrController(NSWindowController):
  
         # init value
         self.typeXML = 'F'
-        self.typeSource = 'A'
+        self.typeSource = 'R'
         self.createTXTOnly = 0
         self.outputTxt = '/tmp/collectr.txt'
         self.volumes = NSArray.arrayWithObject_(NSURL.URLWithString_("file://localhost/Volumes/"))
@@ -247,28 +247,46 @@ class collectrController(NSWindowController):
             #Find and copy R3D files
             for item in self.volumes:
                 volName = item.path()
+                directoryToScan = volName
                 txtfile = open(txtName, 'w+')
                 localFileManager = NSFileManager.alloc().init()
-                dirEnumerator = localFileManager.enumeratorAtURL_includingPropertiesForKeys_options_errorHandler_(directoryToScan, NSArray.arrayWithObjects_(NSURLNameKey, NSURLIsDirectoryKey, None), NSDirectoryEnumerationSkipsHiddenFiles, None)
-                theArray = NSMutableArray.array()
-                for filename in pathurls:
-                    for theURL in dirEnumerator:
-                        if self.typeSource == 'R':
-                            R3Dname = filename[0:16] + '.RDC' # RED
-                            theURL.getResourceValue_forKey_error_(&fileName, NSURLNameKey, None)
-                            # finded = subprocess.check_output(['find', volName, '-type', 'd', '-name', R3Dname]) # RED
-                        else:
-                            R3Dname = filename[0:20] + '*' + '.mov' # Alexa
-                            theURL.getResourceValue_forKey_error_(&fileName, NSURLNameKey, None)
-                            # finded = subprocess.check_output(['find', volName, '-type', 'f', '-name', R3Dname]) 
+                # dirEnumerator = localFileManager.enumeratorAtPath_(directoryToScan)
+                # self.logTextView.insertText_('\n\n')
+                # for item in dirEnumerator:
+                #     self.logTextView.insertText_(item + '\n')
+                # self.logTextView.insertText_('\n\n')
+                # error = NSError.alloc().init()
+                dirEnumerator, error = localFileManager.enumeratorAtURL_includingPropertiesForKeys_options_errorHandler_(
+                    item, 
+                    NSArray.arrayWithObject_(NSURLIsDirectoryKey), 
+                    NSDirectoryEnumerationSkipsHiddenFiles, 
+                    None)
+                # names, error = NSString.stringWithContentsOfFile_encoding_error_(
+                #     u"/usr/share/dict/propernames",
+                #     NSASCIIStringEncoding, None)
+                # dirEnumerator = localFileManager.componentsToDisplayForPath_(directoryToScan)
+                # alert = NSAlert.alloc().init()
+                # alert.setMessageText_(dirEnumerator)#.componentsJoinedByString_(",\n"))
+                # alert.runModal()
+                # theArray = NSMutableArray.array()
+                # for filename in pathurls:
+                #     for theURL in dirEnumerator:
+                #         if self.typeSource == 'R':
+                #             R3Dname = filename[0:16] + '.RDC' # RED
+                #             theURL.getResourceValue_forKey_error_(fileName, NSURLNameKey, objc.nil)
+                #             # finded = subprocess.check_output(['find', volName, '-type', 'd', '-name', R3Dname]) # RED
+                #         else:
+                #             R3Dname = filename[0:20] + '*' + '.mov' # Alexa
+                #             theURL.getResourceValue_forKey_error_(fileName, NSURLNameKey, objc.nil)
+                #             # finded = subprocess.check_output(['find', volName, '-type', 'f', '-name', R3Dname]) 
 
-                    if finded:
-                        self.logTextView.insertText_(filename.rstrip('\n') + ' --------------- ' + str(lineCount) + ' of ' + str(fileCount) + '\n')
-                        subprocess.call(['cp', '-R', finded.rstrip(), pathName])
-                        self.logTextView.insertText_(finded + '\n')
-                        lineCount += 1
-                    else:
-                        txtfile.write(filename)
+                #     if finded:
+                #         self.logTextView.insertText_(filename.rstrip('\n') + ' --------------- ' + str(lineCount) + ' of ' + str(fileCount) + '\n')
+                #         subprocess.call(['cp', '-R', finded.rstrip(), pathName])
+                #         self.logTextView.insertText_(finded + '\n')
+                #         lineCount += 1
+                #     else:
+                #         txtfile.write(filename)
                     
         elif self.createTXTOnly == 'YES':
             return 0
