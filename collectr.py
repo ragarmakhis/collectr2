@@ -236,10 +236,15 @@ class collectrController(NSWindowController):
             #Open text file and read content
 
             txtfile = open(txtName, 'r')
+            self.logTextView.insertText_('Open textfile on read\n')
             tempurls = txtfile.readlines()
+            self.logTextView.insertText_('read line in temp\n')
             pathurls = list(set(tempurls))
+            self.logTextView.insertText_('delite dublicate\n')
             fileCount = len(pathurls)
+            self.logTextView.insertText_('Calculate lenght list\n')
             txtfile.close
+            self.logTextView.insertText_('Close file\n')
 
             lineCount = 1
             R3Dname = ''
@@ -249,18 +254,21 @@ class collectrController(NSWindowController):
                 volName = item.path()
                 directoryToScan = volName
                 txtfile = open(txtName, 'w+')
-                localFileManager = NSFileManager.alloc().init()
-                # dirEnumerator = localFileManager.enumeratorAtPath_(directoryToScan)
-                # self.logTextView.insertText_('\n\n')
-                # for item in dirEnumerator:
-                #     self.logTextView.insertText_(item + '\n')
-                # self.logTextView.insertText_('\n\n')
-                # error = NSError.alloc().init()
-                dirEnumerator, error = localFileManager.enumeratorAtURL_includingPropertiesForKeys_options_errorHandler_(
+                localFileManager = NSFileManager.defaultManager()
+                contents, error = localFileManager.contentsOfDirectoryAtURL_includingPropertiesForKeys_options_error_(
                     item, 
                     NSArray.arrayWithObject_(NSURLIsDirectoryKey), 
-                    NSDirectoryEnumerationSkipsHiddenFiles, 
-                    None)
+                    NSDirectoryEnumerationSkipsHiddenFiles, None)
+                # self.logTextView.insertText_('\n\n')
+                # for item in contents:
+                #     self.logTextView.insertText_(item.path() + '\n')
+                # self.logTextView.insertText_('\n\n')
+
+                # dirEnumerator, error = localFileManager.enumeratorAtURL_includingPropertiesForKeys_options_errorHandler_(
+                #     item, 
+                #     NSArray.arrayWithObject_(NSURLIsDirectoryKey), 
+                #     NSDirectoryEnumerationSkipsHiddenFiles, 
+                #     None)
                 # names, error = NSString.stringWithContentsOfFile_encoding_error_(
                 #     u"/usr/share/dict/propernames",
                 #     NSASCIIStringEncoding, None)
@@ -269,24 +277,21 @@ class collectrController(NSWindowController):
                 # alert.setMessageText_(dirEnumerator)#.componentsJoinedByString_(",\n"))
                 # alert.runModal()
                 # theArray = NSMutableArray.array()
-                # for filename in pathurls:
-                #     for theURL in dirEnumerator:
-                #         if self.typeSource == 'R':
-                #             R3Dname = filename[0:16] + '.RDC' # RED
-                #             theURL.getResourceValue_forKey_error_(fileName, NSURLNameKey, objc.nil)
-                #             # finded = subprocess.check_output(['find', volName, '-type', 'd', '-name', R3Dname]) # RED
-                #         else:
-                #             R3Dname = filename[0:20] + '*' + '.mov' # Alexa
-                #             theURL.getResourceValue_forKey_error_(fileName, NSURLNameKey, objc.nil)
-                #             # finded = subprocess.check_output(['find', volName, '-type', 'f', '-name', R3Dname]) 
 
-                #     if finded:
-                #         self.logTextView.insertText_(filename.rstrip('\n') + ' --------------- ' + str(lineCount) + ' of ' + str(fileCount) + '\n')
-                #         subprocess.call(['cp', '-R', finded.rstrip(), pathName])
-                #         self.logTextView.insertText_(finded + '\n')
-                #         lineCount += 1
-                #     else:
-                #         txtfile.write(filename)
+                for filename in pathurls:
+                    for item in contents:
+                        self.logTextView.insertText_(item.path() + '\n')
+                        if item.lastPathComponent() == '.Trashes':
+                            continue
+                        finded = self.findRAW(item.path(), filename)
+
+                        if finded:
+                            self.logTextView.insertText_(filename.rstrip('\n') + ' --------------- ' + str(lineCount) + ' of ' + str(fileCount) + '\n')
+                            subprocess.call(['cp', '-R', finded.rstrip(), pathName])
+                            self.logTextView.insertText_(finded + '\n')
+                            lineCount += 1
+                        else:
+                            txtfile.write(filename)
                     
         elif self.createTXTOnly == 'YES':
             return 0
@@ -295,6 +300,14 @@ class collectrController(NSWindowController):
  
     # def updateDisplay(self):
     #     self.counterTextField.setStringValue_(self.count)
+    def findRAW(self, path, rawName):
+        if self.typeSource == 'R':
+            R3Dname = rawName[0:16] + '.RDC' # RED
+            finded = subprocess.check_output(['find', path, '-type', 'd', '-name', R3Dname]) # RED
+        else:
+            R3Dname = rawName[0:20] + '*' + '.mov' # Alexa
+            finded = subprocess.check_output(['find', path, '-type', 'f', '-name', R3Dname])
+        return finded
  
 if __name__ == "__main__":
     app = NSApplication.sharedApplication()

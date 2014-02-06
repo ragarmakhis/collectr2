@@ -7,17 +7,6 @@ def _reset_sys_path():
 _reset_sys_path()
 
 
-def _update_path():
-    import os, sys
-    resources = os.environ['RESOURCEPATH']
-    sys.path.append(os.path.join(
-        resources, 'lib', 'python%d.%d'%(sys.version_info[:2]), 'lib-dynload'))
-    sys.path.append(os.path.join(
-        resources, 'lib', 'python%d.%d'%(sys.version_info[:2])))
-
-_update_path()
-
-
 def _site_packages():
     import site, sys, os
     paths = []
@@ -25,8 +14,12 @@ def _site_packages():
     if sys.exec_prefix != sys.prefix:
         prefixes.append(sys.exec_prefix)
     for prefix in prefixes:
-        paths.append(os.path.join(prefix, 'lib', 'python' + sys.version[:3],
-            'site-packages'))
+	if prefix == sys.prefix:
+	    paths.append(os.path.join("/Library/Python", sys.version[:3], "site-packages"))
+	    paths.append(os.path.join(sys.prefix, "Extras", "lib", "python"))
+	else:
+	    paths.append(os.path.join(prefix, 'lib', 'python' + sys.version[:3],
+		'site-packages'))
     if os.path.join('.framework', '') in os.path.join(sys.prefix, ''):
         home = os.environ.get('HOME')
         if home:
@@ -66,7 +59,7 @@ def _path_inject(paths):
     sys.path[:0] = paths
 
 
-_path_inject(['/Users/edit_5/collectr'])
+_path_inject(['/Users/maksimroshtshin/collectr'])
 
 
 def _run():
@@ -85,7 +78,7 @@ def _run():
 
 
 
-DEFAULT_SCRIPT='/Users/edit_5/collectr/collectr.py'
+DEFAULT_SCRIPT='/Users/maksimroshtshin/collectr/collectr.py'
 SCRIPT_MAP={}
 try:
     _run()
